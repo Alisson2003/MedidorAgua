@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Registrar Lectura</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="stacked">Valor del Medidor</ion-label>
+    <ion-input [(ngModel)]="valor_medidor"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Observaciones</ion-label>
+    <ion-textarea [(ngModel)]="observaciones"></ion-textarea>
+  </ion-item>
+
+  <ion-button expand="block" (click)="tomarFoto('medidor')">📸 Foto del Medidor</ion-button>
+  <img *ngIf="fotoMedidorUrl" [src]="fotoMedidorUrl" width="100%"/>
+
+  <ion-button expand="block" (click)="tomarFoto('fachada')">🏠 Foto de Fachada</ion-button>
+  <img *ngIf="fotoFachadaUrl" [src]="fotoFachadaUrl" width="100%"/>
+
+  <ion-button expand="block" color="success" (click)="guardarLectura()">Guardar Lectura</ion-button>
+</ion-content>

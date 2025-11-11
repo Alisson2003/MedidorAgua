@@ -47,4 +47,30 @@ export class SupabaseService {
     return data.session;
   }
 
+  //MEDIDOR
+
+  async insertarLectura(lectura: any) {
+    const { data, error } = await this.supabase.from('lecturas').insert([lectura]);
+    if (error) throw error;
+    return data;
+  }
+
+  async obtenerLecturas(userId: string, esAdmin = false) {
+    const query = this.supabase.from('lecturas').select('*');
+    if (!esAdmin) query.eq('user_id', userId);
+    const { data, error } = await query.order('created_at', { ascending: false });
+    if (error) throw error;
+    return data;
+  }
+
+  // 📸 Subida de imágenes
+  async subirFoto(nombre: string, archivo: Blob) {
+    const { data, error } = await this.supabase.storage
+      .from('lecturas')
+      .upload(nombre, archivo, { contentType: 'image/jpeg' });
+    if (error) throw error;
+
+    return this.supabase.storage.from('lecturas').getPublicUrl(nombre).data.publicUrl;
+  }
+
 }
