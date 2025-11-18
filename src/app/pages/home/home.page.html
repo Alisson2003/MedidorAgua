@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Menú</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">Salir</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-button expand="block" routerLink="/lectura">Registrar lectura</ion-button>
+<ion-button expand="block" routerLink="/lista-lecturas">Ver lecturas</ion-button>
+
+<ion-content class="ion-padding">
+  <ion-button routerLink="/nueva" expand="full">Registrar Nueva Lectura</ion-button>
+  <ion-button routerLink="/lista-lectura" expand="full">Ver Mis Lecturas</ion-button>
+
+  <ion-button color="danger" expand="block" (click)="logout()">Cerrar sesión</ion-button>
+</ion-content>

@@ -5,9 +5,10 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
   <ion-item>
-    <ion-label position="stacked">Valor del Medidor</ion-label>
-    <ion-input [(ngModel)]="valor_medidor"></ion-input>
+    <ion-label position="stacked">Valor del medidor</ion-label>
+    <ion-input type="number" [(ngModel)]="valorMedidor"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -15,11 +16,28 @@
     <ion-textarea [(ngModel)]="observaciones"></ion-textarea>
   </ion-item>
 
-  <ion-button expand="block" (click)="tomarFoto('medidor')">📸 Foto del Medidor</ion-button>
-  <img *ngIf="fotoMedidorUrl" [src]="fotoMedidorUrl" width="100%"/>
+  <ion-button expand="block" (click)="tomarGPS()">
+    Tomar Ubicación GPS
+  </ion-button>
 
-  <ion-button expand="block" (click)="tomarFoto('fachada')">🏠 Foto de Fachada</ion-button>
-  <img *ngIf="fotoFachadaUrl" [src]="fotoFachadaUrl" width="100%"/>
+  <ion-text color="medium" *ngIf="lat && lng">
+    Ubicación capturada: {{ lat }}, {{ lng }}
+  </ion-text>
 
-  <ion-button expand="block" color="success" (click)="guardarLectura()">Guardar Lectura</ion-button>
+  <ion-button expand="block" (click)="tomarFotoMedidor()">
+    Tomar foto del medidor
+  </ion-button>
+
+  <ion-img *ngIf="fotoMedidor" [src]="fotoMedidor" class="preview-img"></ion-img>
+
+  <ion-button expand="block" (click)="tomarFotoFachada()">
+    Tomar foto de la fachada
+  </ion-button>
+
+  <ion-img *ngIf="fotoFachada" [src]="fotoFachada" class="preview-img"></ion-img>
+
+  <ion-button [disabled]="subiendo" expand="block" (click)="guardar()">
+    Guardar lectura
+  </ion-button>
+
 </ion-content>

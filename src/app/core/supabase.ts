@@ -21,6 +21,24 @@ export class SupabaseService {
     });
   }
 
+  async getUserRole(userId: string) {
+    const { data, error } = await this.supabase
+      .from('usuarios')
+      .select('rol')
+      .eq('id', userId)
+      .maybeSingle();
+    if (error) throw error;
+    return data?.rol ?? null;
+  }
+
+  async isAdmin() {
+    const session = await this.getCurrentSession();
+    const uid = session?.user?.id;
+    if (!uid) return false;
+    const rol = await this.getUserRole(uid);
+    return rol === 'admin';
+  }
+
   get client() {
     return this.supabase;
   }

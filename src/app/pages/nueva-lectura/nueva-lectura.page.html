@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Nueva Lectura</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label>Valor</ion-label>
+    <ion-input type="number" [(ngModel)]="valor"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Observaciones</ion-label>
+    <ion-textarea [(ngModel)]="observaciones"></ion-textarea>
+  </ion-item>
+
+  <ion-button expand="full" (click)="guardar()">
+    Guardar Lectura
+  </ion-button>
+
+</ion-content>
