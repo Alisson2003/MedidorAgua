@@ -1,28 +1,21 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from 'src/app/core/supabase';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
-  standalone: false,
+  styleUrls: ['./home.page.scss'],
+  standalone: false
 })
-
-export class HomePage {
+export class HomePage implements OnInit {
   lecturas: any[] = [];
 
-  constructor(private supa: SupabaseService, private router: Router) { }
+  constructor(private supa: SupabaseService) {}
 
-  async ionViewWillEnter() {
+  async ngOnInit() {
     const session = await this.supa.getCurrentSession();
+    if (!session?.user) return;
 
-    if (!session || !session.user) return;
     this.lecturas = await this.supa.obtenerLecturas(session.user.id, false);
   }
-
-  logout() {
-    this.supa.signOut();
-    this.router.navigate(['/login']);
-  }
-
 }

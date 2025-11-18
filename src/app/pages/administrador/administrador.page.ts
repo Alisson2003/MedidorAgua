@@ -1,27 +1,25 @@
-import { Component } from '@angular/core';
-import { SupabaseService } from 'src/app/core/supabase';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SupabaseService } from 'src/app/core/supabase';
 
 @Component({
-  selector: 'app-administrador',
+  selector: 'app-admin',
   templateUrl: './administrador.page.html',
   standalone: false
 })
 
-export class AdminPage {
+export class AdminPage implements OnInit {
   lecturas: any[] = [];
 
-  constructor(private supa: SupabaseService, private router: Router) { }
+  constructor(private supa: SupabaseService, private router: Router) {}
 
-  async ionViewWillEnter() {
+  async ngOnInit() {
     this.lecturas = await this.supa.obtenerLecturas('', true);
   }
 
-  logout() {
-    this.supa.signOut();
+  async logout() {
+    await this.supa.signOut();
     this.router.navigate(['/login']);
   }
-
-
 }
 

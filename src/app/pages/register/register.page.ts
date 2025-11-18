@@ -5,31 +5,23 @@ import { SupabaseService } from 'src/app/core/supabase';
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
-  standalone: false,
+  standalone: false
 })
 
 export class RegisterPage {
   email = '';
   password = '';
-  rol = '';
+  rol = 'medidor'; 
 
-  constructor(
-    private supa: SupabaseService,
-    private router: Router
-  ) { }
+  constructor(private supa: SupabaseService, private router: Router) {}
 
   async registrar() {
     try {
-      const { data, error } = await this.supa.client.auth.signUp({
-        email: this.email,
-        password: this.password
-      });
-      if (error) { alert(error.message); return; }
-
-      alert('Cuenta creada. Revisa tu correo y confirma para poder iniciar sesión.');
+      await this.supa.signUpWithRol(this.email, this.password, this.rol);
+      alert('Usuario registrado correctamente');
       this.router.navigate(['/login']);
-    } catch (e: any) {
-      alert(e?.message || 'Error al registrar');
+    } catch (error: any) {
+      alert(error.message);
     }
   }
 }

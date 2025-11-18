@@ -1,24 +1,22 @@
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar>
     <ion-title>Administrador</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()">Salir</ion-button>
+      <ion-button color="danger" (click)="logout()">Salir</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <ion-list>
     <ion-item *ngFor="let l of lecturas">
       <ion-label>
-        <h2>{{ l.user_id }}</h2>
-        <p>Valor: {{ l.valor }}</p>
-        <p>Obs: {{ l.observacion }}</p>
-        <a [href]="l.mapa" target="_blank">Ver Mapa</a>
+        Usuario: {{l.user_id}} <br>
+        Valor: {{l.valor}} <br>
+        Observaciones: {{l.observaciones}} <br>
+        <a *ngIf="l.foto_medidor" [href]="l.foto_medidor" target="_blank">Foto Medidor</a><br>
+        <a *ngIf="l.foto_fachada" [href]="l.foto_fachada" target="_blank">Foto Fachada</a>
       </ion-label>
-
-      <img [src]="l.foto_medidor" width="70">
-      <img [src]="l.foto_casa" width="70">
     </ion-item>
   </ion-list>
 </ion-content>

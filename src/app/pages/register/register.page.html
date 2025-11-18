@@ -5,34 +5,15 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-input placeholder="Email" [(ngModel)]="email"></ion-input>
+  <ion-input placeholder="Contraseña" [(ngModel)]="password" type="password"></ion-input>
 
-  <ion-item>
-    <ion-input
-      label="Correo"
-      [(ngModel)]="email"
-      type="email">
-    </ion-input>
-  </ion-item>
+  <ion-label>Selecciona tu rol</ion-label>
+  <ion-select [(ngModel)]="rol">
+    <ion-select-option value="medidor">Medidor</ion-select-option>
+    <ion-select-option value="admin">Admin</ion-select-option>
+  </ion-select>
 
-  <ion-item>
-    <ion-input
-      label="Contraseña"
-      [(ngModel)]="password"
-      type="password">
-    </ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-select
-      label="Rol"
-      [(ngModel)]="rol">
-      <ion-select-option value="admin">Admin</ion-select-option>
-      <ion-select-option value="user">Usuario</ion-select-option>
-    </ion-select>
-  </ion-item>
-
-  <ion-button expand="full" (click)="registrar()">
-    Registrar
-  </ion-button>
-
+  <ion-button expand="full" color="primary" (click)="registrar()">Registrarse</ion-button>
+  
 </ion-content>

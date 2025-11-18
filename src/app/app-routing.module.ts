@@ -15,16 +15,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule),
   },
   {
-    path: 'lectura',
-    canActivate: [authGuard],
-    loadChildren: () => import('./pages/lectura/lectura.module').then(m => m.LecturaPageModule),
-  },
-  {
-    path: 'lista-lectura',
-    canActivate: [authGuard],
-    loadChildren: () => import('./pages/lista-lecturas/lista-lecturas.module').then(m => m.ListaLecturasPageModule),
-  },
-  {
     path: 'admin',
     canActivate: [authGuard],
     loadChildren: () => import('./pages/administrador/administrador.module').then(m => m.AdministradorPageModule),

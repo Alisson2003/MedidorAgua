@@ -1,18 +1,23 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Menú</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="logout()">Salir</ion-button>
-    </ion-buttons>
+  <ion-toolbar color="primary">
+    <ion-title>Mis Lecturas</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-button expand="block" routerLink="/lectura">Registrar lectura</ion-button>
-<ion-button expand="block" routerLink="/lista-lecturas">Ver lecturas</ion-button>
-
 <ion-content class="ion-padding">
-  <ion-button routerLink="/nueva" expand="full">Registrar Nueva Lectura</ion-button>
-  <ion-button routerLink="/lista-lectura" expand="full">Ver Mis Lecturas</ion-button>
 
-  <ion-button color="danger" expand="block" (click)="logout()">Cerrar sesión</ion-button>
+  <ion-button expand="full" color="primary" [routerLink]="'/nueva-lectura'">
+    Registrar nueva lectura
+  </ion-button>
+
+  <ion-list>
+    <ion-item *ngFor="let lectura of lecturas">
+      <ion-label>
+        <h2>Valor: {{ lectura.valor }}</h2>
+        <p>Observaciones: {{ lectura.observaciones }}</p>
+        <p>Fecha: {{ lectura.created_at | date:'short' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
