@@ -20,34 +20,16 @@ export class RegisterPage {
 
   async registrar() {
     try {
-      if (!this.email || !this.password || !this.rol) {
-        alert('Completa email, contraseña y rol'); 
-        return;
-      }
-
       const { data, error } = await this.supa.client.auth.signUp({
-        email: this.email, password: this.password
+        email: this.email,
+        password: this.password
       });
+      if (error) { alert(error.message); return; }
 
-      if (error) 
-        { alert(error.message); 
-        return; }
-
-      const user = data.user;
-      if (!user?.id) 
-        { alert('Revisa tu correo para confirmar tu cuenta'); 
-          return; }
-
-      const { error: insertError } = await this.supa.client.from('usuarios').insert({
-        id: user.id, email: this.email, rol: this.rol
-      });
-
-      if (insertError)
-        { alert('Error al guardar usuario: ' + insertError.message); 
-          return; }
-
-      alert('Cuenta creada, ahora inicia sesión');
+      alert('Cuenta creada. Revisa tu correo y confirma para poder iniciar sesión.');
       this.router.navigate(['/login']);
-    } catch (e: any) { alert(e.message); }
+    } catch (e: any) {
+      alert(e?.message || 'Error al registrar');
+    }
   }
 }

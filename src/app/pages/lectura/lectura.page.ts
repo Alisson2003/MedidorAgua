@@ -18,31 +18,21 @@ export class LecturaPage {
   fotoFachada!: string;
   subiendo = false;
 
-  constructor(private supabase: SupabaseService) {}
-
-  async tomarGPS() {
-    try {
-      const pos = await Geolocation.getCurrentPosition();
-      this.lat = pos.coords.latitude;
-      this.lng = pos.coords.longitude;
-    } catch (e: any) {
-      alert('Error al obtener ubicación: ' + e?.message);
-    }
-  }
+  constructor(private supabase: SupabaseService) { }
 
   async tomarFotoMedidor() {
     try {
       const img = await Camera.getPhoto({
         source: CameraSource.Camera,
-        resultType: CameraResultType.Base64,
+        resultType: CameraResultType.Uri,
         quality: 80,
       });
-
+      const response = await fetch(img.webPath!);
+      const blob = await response.blob();
       const nombre = `medidor-${Date.now()}.jpg`;
-      const blob = this.b64toBlob(img.base64String!);
       this.fotoMedidor = await this.supabase.subirFoto(nombre, blob);
     } catch (e: any) {
-      alert('Error al tomar foto del medidor: ' + e?.message);
+      alert('Error al tomar foto del medidor');
     }
   }
 
@@ -50,35 +40,39 @@ export class LecturaPage {
     try {
       const img = await Camera.getPhoto({
         source: CameraSource.Camera,
-        resultType: CameraResultType.Base64,
+        resultType: CameraResultType.Uri,
         quality: 80,
       });
-
+      const response = await fetch(img.webPath!);
+      const blob = await response.blob();
       const nombre = `fachada-${Date.now()}.jpg`;
-      const blob = this.b64toBlob(img.base64String!);
       this.fotoFachada = await this.supabase.subirFoto(nombre, blob);
     } catch (e: any) {
-      alert('Error al tomar foto de la fachada: ' + e?.message);
+      alert('Error al tomar foto de la fachada');
+    }
+  }
+
+  async tomarGPS() {
+    try {
+      const pos = await Geolocation.getCurrentPosition();
+      this.lat = pos.coords.latitude;
+      this.lng = pos.coords.longitude;
+    } catch {
+      alert('Error al obtener ubicación');
     }
   }
 
   async guardar() {
     this.subiendo = true;
-
     if (!this.valorMedidor || !this.lat || !this.lng || !this.fotoMedidor || !this.fotoFachada) {
       alert('Completa todos los campos y toma las fotos antes de guardar');
       this.subiendo = false;
       return;
     }
-
     try {
       const session = await this.supabase.getCurrentSession();
       const uid = session?.user?.id;
-      if (!uid) {
-        alert('Sesión inválida');
-        this.subiendo = false;
-        return;
-      }
+      if (!uid) { alert('Sesión inválida'); this.subiendo = false; return; }
 
       await this.supabase.insertarLectura({
         user_id: uid,
@@ -99,16 +93,16 @@ export class LecturaPage {
       this.lat = 0;
       this.lng = 0;
     } catch (e: any) {
-      alert('Error al guardar lectura: ' + e.message);
+      alert(e?.message || 'Error al guardar lectura');
     }
-
     this.subiendo = false;
   }
 
-  b64toBlob(base64: string): Blob {
-    const byteChars = atob(base64);
-    const arr = new Uint8Array(byteChars.length);
-    for (let i = 0; i < byteChars.length; i++) arr[i] = byteChars.charCodeAt(i);
-    return new Blob([arr], { type: 'image/jpeg' });
-  }
+  /*
+    b64toBlob(base64: string): Blob {
+      const byteChars = atob(base64);
+      const arr = new Uint8Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) arr[i] = byteChars.charCodeAt(i);
+      return new Blob([arr], { type: 'image/jpeg' });
+    }*/
 }

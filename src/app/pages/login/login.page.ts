@@ -10,8 +10,7 @@ import { SupabaseService } from 'src/app/core/supabase';
 export class LoginPage {
   email = '';
   password = '';
-  error = '';
-  rol: string = '';   // <-- propiedad para el ion-select
+  rol: string = '';
 
   constructor(
     private supa: SupabaseService,
@@ -21,29 +20,40 @@ export class LoginPage {
   async login() {
     try {
       const { data, error } = await this.supa.client.auth.signInWithPassword({
-        email: this.email, password: this.password
+        email: this.email,
+        password: this.password
       });
-      if (error) { alert(error.message); 
-        return; }
+      if (error) { alert(error.message); return; }
 
       const user = data.user;
-      if (!user?.id) 
-        { alert('No se pudo obtener el usuario'); 
-          return; }
+      if (!user?.id) { alert('No se pudo obtener el usuario'); return; }
 
-      const rol = await this.supa.getUserRole(user.id);
-      if (!rol) 
-        { alert('Error: usuario sin rol'); 
-          return; }
+      // Crea/actualiza el registro en usuarios con rol por defecto 'usuario'
+      const { error: upsertErr } = await this.supa.client.from('usuarios').upsert({
+        id: user.id,
+        email: this.email,
+        rol: 'usuario'
+      });
+      if (upsertErr) { alert('Error al guardar usuario: ' + upsertErr.message); return; }
 
-      this.rol = rol;
-      if (rol === 'admin') this.router.navigate(['/admin']);
-      else this.router.navigate(['/home']);
+      // Obtén el rol para redirigir
+      const { data: rolData, error: rolErr } = await this.supa.client
+        .from('usuarios')
+        .select('rol')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (rolErr) { alert('Error al obtener rol: ' + rolErr.message); return; }
+      const rol = rolData?.rol || 'usuario';
+
+      // Redirección por rol
+      this.router.navigate([rol === 'admin' ? '/admin' : '/home']);
     } catch (e: any) {
-      console.error(e); alert('Error al ingresar: ' + e.message);
+      alert(e?.message || 'Error al iniciar sesión');
     }
   }
 
-  register() { this.router.navigate(['/register']); }
+  register() {
+    this.router.navigate(['/register']);
+  }
 
 }
