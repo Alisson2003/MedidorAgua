@@ -10,6 +10,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule),
   },
   {
+    path: 'nueva-lectura',
+    loadChildren: () => import('./pages/nueva-lectura/nueva-lectura.module').then( m => m.NuevaLecturaPageModule)
+  },
+  {
     path: 'home',
     canActivate: [authGuard],
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule),
@@ -23,10 +27,7 @@ const routes: Routes = [
     path: 'register',
     loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
   },
-  {
-    path: 'nueva-lectura',
-    loadChildren: () => import('./pages/nueva-lectura/nueva-lectura.module').then( m => m.NuevaLecturaPageModule)
-  },
+  
 
 ];
 

@@ -1,0 +1,21 @@
+ion-content {
+    --background: linear-gradient(135deg, #f5c7f7, #d3c0f9, #a0eaff);
+}
+
+ion-item {
+    --background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+ion-toolbar {
+    --background: linear-gradient(135deg, #b19cd9, #f9c0d3);
+    color: white;
+}
+
+ion-button {
+    --background: linear-gradient(135deg, #d3c0f9, #a0eaff);
+    color: white;
+    border-radius: 10px;
+    margin-left: 5px;
+}

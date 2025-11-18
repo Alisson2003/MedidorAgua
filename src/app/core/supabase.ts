@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient, Session } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
+import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
@@ -21,13 +23,6 @@ export class SupabaseService {
     return data;
   }
 
-  /** REGISTRO SIMPLE (solo auth) */
-  async signUp(email: string, password: string) {
-    const { data, error } = await this.supabase.auth.signUp({ email, password });
-    if (error) throw error;
-    return data;
-  }
-
   /** REGISTRO CON ROL */
   async signUpWithRol(email: string, password: string, rol: string) {
     const { data, error } = await this.supabase.auth.signUp({ email, password });
@@ -36,7 +31,6 @@ export class SupabaseService {
     const user = data.user;
     if (!user) throw new Error("No se pudo crear el usuario");
 
-    // Insertar en tabla 'usuarios'
     const { error: insertError } = await this.supabase
       .from('usuarios')
       .insert([{ id: user.id, email, rol }]);
@@ -45,7 +39,6 @@ export class SupabaseService {
 
     return user;
   }
-
 
   /** LOGOUT */
   async signOut() {
@@ -60,31 +53,54 @@ export class SupabaseService {
     return data.session;
   }
 
+  /** TOMAR FOTO */
+  async tomarFoto(): Promise<string> {
+    const photo: Photo = await Camera.getPhoto({
+      quality: 80,
+      allowEditing: true,
+      source: CameraSource.Camera,
+      //source: CameraSource.Prompt,
+      resultType: CameraResultType.Base64
+    });
+
+    if (!photo.base64String) throw new Error("No se pudo tomar la foto");
+    return photo.base64String;
+  }
+
+  /** SUBIR FOTO A SUPABASE */
+  async subirFoto(base64Image: string, fileName: string): Promise<string> {
+    const byteString = atob(base64Image);
+    const bytes = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+      bytes[i] = byteString.charCodeAt(i);
+    }
+
+    const file = new Blob([bytes], { type: 'image/jpeg' });
+
+    const { error } = await this.supabase.storage
+      .from('fotos_medidores')
+      .upload(fileName, file, { contentType: 'image/jpeg', upsert: true });
+
+    if (error) throw error;
+
+    const urlData = this.supabase.storage.from('fotos_medidores').getPublicUrl(fileName);
+    return urlData.data.publicUrl;
+  }
+
   /** INSERTAR LECTURA */
   async insertarLectura(lectura: any) {
-    const { data, error } = await this.supabase.from('lecturas').insert([lectura]);
+    const { data, error } = await this.supabase.from('fotos_medidores').insert([lectura]);
     if (error) throw error;
     return data;
   }
 
   /** OBTENER LECTURAS */
   async obtenerLecturas(userId: string, esAdmin = false) {
-    let query = this.supabase.from('lecturas').select('*');
+    let query = this.supabase.from('fotos_medidores').select('*');
     if (!esAdmin) query = query.eq('user_id', userId);
     const { data, error } = await query.order('created_at', { ascending: false });
     if (error) throw error;
     return data;
-  }
-
-  /** SUBIR FOTO */
-  async subirFoto(nombre: string, archivo: Blob) {
-    const { data, error } = await this.supabase.storage
-      .from('lecturas')
-      .upload(nombre, archivo, { contentType: 'image/jpeg' });
-    if (error) throw error;
-
-    const urlData = this.supabase.storage.from('lecturas').getPublicUrl(nombre);
-    return urlData.data.publicUrl;
   }
 
   /** OBTENER ROL DEL USUARIO */
@@ -93,8 +109,17 @@ export class SupabaseService {
       .from('usuarios')
       .select('rol')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
     if (error) throw error;
     return data?.rol;
+  }
+
+  /** OBTENER UBICACIÓN */
+  async obtenerUbicacion(): Promise<{ lat: number; lng: number }> {
+    const position = await Geolocation.getCurrentPosition();
+    return {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
   }
 }

@@ -5,6 +5,7 @@ import { SupabaseService } from 'src/app/core/supabase';
 @Component({
   selector: 'app-admin',
   templateUrl: './administrador.page.html',
+  styleUrls: ['./administrador.page.scss'],
   standalone: false
 })
 

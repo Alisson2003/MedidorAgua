@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>Nueva Lectura</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -8,7 +8,7 @@
 
   <ion-item>
     <ion-label position="floating">Valor del Medidor</ion-label>
-    <ion-input type="text" [(ngModel)]="valorMedidor"></ion-input>
+    <ion-input [(ngModel)]="valorMedidor"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -16,25 +16,23 @@
     <ion-textarea [(ngModel)]="observaciones"></ion-textarea>
   </ion-item>
 
-  <ion-item>
-    <ion-label>Foto del Medidor</ion-label>
-    <input type="file" (change)="onFotoMedidorChange($event)" />
-  </ion-item>
+  <ion-button expand="full" (click)="tomarFotoMedidor()">
+    Tomar foto del Medidor
+  </ion-button>
+
+  <ion-button expand="full" (click)="tomarFotoFachada()">
+    Tomar foto de la Fachada
+  </ion-button>
 
   <ion-item>
-    <ion-label>Foto de la Fachada</ion-label>
-    <input type="file" (change)="onFotoFachadaChange($event)" />
+    <ion-label>Ubicación actual</ion-label>
+    <ion-text>Lat: {{lat}} — Lng: {{lng}}</ion-text>
+    <ion-button slot="end" (click)="obtenerGps()">Obtener GPS</ion-button>
   </ion-item>
 
-  <ion-item>
-    <ion-label>Latitud: {{ latitud }}</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>Longitud: {{ longitud }}</ion-label>
-  </ion-item>
-
-  <ion-button expand="full" color="success" (click)="guardarLectura()">
+  <ion-button expand="full" (click)="guardarLectura()">
     Guardar Lectura
   </ion-button>
 
 </ion-content>
+

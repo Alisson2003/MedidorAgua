@@ -1,0 +1,28 @@
+ion-content {
+    --background: linear-gradient(135deg, #f5c7f7, #a0eaff, #d3c0f9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+ion-input,
+ion-select {
+    margin-bottom: 15px;
+    border-radius: 10px;
+    --background: rgba(255, 255, 255, 0.85);
+    padding-left: 15px;
+}
+
+ion-button {
+    --background: linear-gradient(135deg, #b19cd9, #f9c0d3);
+    color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+ion-toolbar {
+    --background: linear-gradient(135deg, #d3c0f9, #f5c7f7);
+    color: #fff;
+}

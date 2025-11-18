@@ -1,0 +1,27 @@
+ion-content {
+    --background: linear-gradient(135deg, #a0eaff, #f5c7f7, #d3c0f9);
+}
+
+ion-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+}
+
+ion-item {
+    --background: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+ion-toolbar {
+    --background: linear-gradient(135deg, #b19cd9, #e0b0ff);
+    color: #fff;
+}
+
+ion-button {
+    --background: linear-gradient(135deg, #f9c0d3, #a0eaff);
+    color: white;
+    border-radius: 10px;
+    margin-left: 5px;
+}

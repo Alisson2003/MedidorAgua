@@ -1,14 +1,15 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>Mis Lecturas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="rol==='admin'" routerLink="/admin">Panel Admin</ion-button>
+      <ion-button *ngIf="rol==='medidor'" routerLink="/nueva-lectura">Nueva Lectura</ion-button>
+      <ion-button color="danger" (click)="logout()">Salir</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-
-  <ion-button expand="full" color="primary" [routerLink]="'/nueva-lectura'">
-    Registrar nueva lectura
-  </ion-button>
 
   <ion-list>
     <ion-item *ngFor="let lectura of lecturas">
@@ -16,8 +17,22 @@
         <h2>Valor: {{ lectura.valor }}</h2>
         <p>Observaciones: {{ lectura.observaciones }}</p>
         <p>Fecha: {{ lectura.created_at | date:'short' }}</p>
+        <p>Lat: {{ lectura.lat }} — Lng: {{ lectura.lng }}</p>
+        <a [href]="mapsLink(lectura.lat, lectura.lng)" target="_blank">Abrir en Google Maps</a>
+        <div *ngIf="lectura.foto_medidor">
+          <a [href]="lectura.foto_medidor" target="_blank">Ver foto medidor</a>
+        </div>
+        <div *ngIf="lectura.foto_fachada">
+          <a [href]="lectura.foto_fachada" target="_blank">Ver foto fachada</a>
+        </div>
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-card *ngIf="lecturas.length === 0">
+    <ion-card-content>
+      No hay lecturas registradas.
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>

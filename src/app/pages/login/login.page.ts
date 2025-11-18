@@ -5,6 +5,7 @@ import { SupabaseService } from 'src/app/core/supabase';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
   standalone: false
 })
 
